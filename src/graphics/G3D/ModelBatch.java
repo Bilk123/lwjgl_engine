@@ -9,8 +9,8 @@ import math.Vec4;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
-import static graphics.Shader.SHADER_COLOR_INDEX;
-import static graphics.Shader.SHADER_VERTEX_INDEX;
+import static graphics.G2D.SpriteBatch.SHADER_COLOR_INDEX;
+import static graphics.G2D.SpriteBatch.SHADER_VERTEX_INDEX;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;

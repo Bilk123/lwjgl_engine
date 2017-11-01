@@ -2,15 +2,17 @@ package graphics.G2D;
 
 import graphics.RenderUtil;
 import graphics.buffers.IndexBuffer;
+import math.Mat4;
 import math.Vec2;
 import math.Vec3;
 import math.Vec4;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
-import static graphics.Shader.SHADER_COLOR_INDEX;
-import static graphics.Shader.SHADER_VERTEX_INDEX;
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
@@ -19,18 +21,25 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class SpriteBatch extends Renderer2D {
     private static final int BATCH2D_MAX_SPRITES = 60000;
-    private static final int BATCH2D_VERTEX_SIZE = Vec3.BYTES + Vec4.BYTES;
+    private static final int BATCH2D_VERTEX_SIZE = Vec3.BYTES + Vec4.BYTES + Vec2.BYTES + Integer.BYTES;
     private static final int BATCH2D_SPRITE_SIZE = BATCH2D_VERTEX_SIZE * 4;
     private static final int BATCH2D_BUFFER_SIZE = BATCH2D_SPRITE_SIZE * BATCH2D_MAX_SPRITES;
     private static final int BATCH2D_INDICES_SIZE = BATCH2D_MAX_SPRITES * 6;
+
+    public static final int SHADER_VERTEX_INDEX = 0;
+    private static final int SHADER_UV_INDEX = 1;
+    private static final int SHADER_TID_INDEX = 2;
+    public static final int SHADER_COLOR_INDEX = 3;
 
     private int VAO;
     private IndexBuffer IBO;
     private int indexCount = 0;
     private int VBO;
     private FloatBuffer vertexData;
+    private ArrayList<Integer> textureSlots;
 
     public SpriteBatch() {
+        textureSlots = new ArrayList<>();
         VAO = glGenVertexArrays();
         VBO = glGenBuffers();
 
@@ -39,10 +48,14 @@ public class SpriteBatch extends Renderer2D {
         glBufferData(GL_ARRAY_BUFFER, BATCH2D_BUFFER_SIZE, GL_DYNAMIC_DRAW);
 
         glEnableVertexAttribArray(SHADER_VERTEX_INDEX);
+        glEnableVertexAttribArray(SHADER_UV_INDEX);
+        glEnableVertexAttribArray(SHADER_TID_INDEX);
         glEnableVertexAttribArray(SHADER_COLOR_INDEX);
 
         glVertexAttribPointer(SHADER_VERTEX_INDEX, Vec3.COMPONENTS, GL_FLOAT, false, BATCH2D_VERTEX_SIZE, 0);
-        glVertexAttribPointer(SHADER_COLOR_INDEX, Vec4.COMPONENTS, GL_FLOAT, false, BATCH2D_VERTEX_SIZE, Vec3.BYTES);
+        glVertexAttribPointer(SHADER_UV_INDEX, Vec2.COMPONENTS, GL_FLOAT, false, BATCH2D_VERTEX_SIZE, Vec3.BYTES);
+        glVertexAttribPointer(SHADER_TID_INDEX, 1, GL_FLOAT, false, BATCH2D_VERTEX_SIZE, Vec3.BYTES + Vec2.BYTES);
+        glVertexAttribPointer(SHADER_COLOR_INDEX, Vec4.COMPONENTS, GL_FLOAT, false, BATCH2D_VERTEX_SIZE, Vec3.BYTES + Vec2.BYTES + Integer.BYTES);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
@@ -59,6 +72,7 @@ public class SpriteBatch extends Renderer2D {
 
         IBO = new IndexBuffer(indices);
     }
+
     @Override
     public void begin() {
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -67,15 +81,40 @@ public class SpriteBatch extends Renderer2D {
 
     @Override
     public void submit(Renderable2D s) {
-        Vec2 size = s.getSize();
-        Vec3 pos = s.getPosition();
-        Vec4 color = s.getColor();
+
+        Mat4 transformStackMat = getLastTransformMat();
+        int tID = s.getTextureID();
+        Vec4 color;
+        color = s.getColor();
 
 
-        addVertex(pos, color);
-        addVertex(pos.add(0, size.y, 0), color);
-        addVertex(pos.add(size.x,size.y,0), color);
-        addVertex(pos.add(size.x,0,0), color);
+        float ts = 0;
+        if (tID > 0) {
+            boolean found = false;
+            for (int i = 0; i < textureSlots.size(); i++) {
+                if (textureSlots.get(i) == tID){
+                    ts = i+1;
+                    found =true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                if (textureSlots.size() >= 32) {
+                    end();
+                    flush();
+                    begin();
+                }
+                textureSlots.add(tID);
+                ts = textureSlots.size();
+            }
+
+        }
+
+        addVertex(transformStackMat.mul(s.transform.mul(new Vec3(0, 0, 0))), s.getUvs().get(0), ts, color);
+        addVertex(transformStackMat.mul(s.transform.mul(new Vec3(0, 1, 0))), s.getUvs().get(1), ts, color);
+        addVertex(transformStackMat.mul(s.transform.mul(new Vec3(1, 1, 0))), s.getUvs().get(2), ts, color);
+        addVertex(transformStackMat.mul(s.transform.mul(new Vec3(1, 0, 0))), s.getUvs().get(3), ts, color);
 
         indexCount += 6;
     }
@@ -87,19 +126,28 @@ public class SpriteBatch extends Renderer2D {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    private void addVertex(Vec3 pos, Vec4 color) {
+    @Override
+    public void flush() {
+        for (int i = 0; i < textureSlots.size(); i++) {
+            glActiveTexture(GL_TEXTURE0 + i);
+            glBindTexture(GL_TEXTURE_2D, textureSlots.get(i));
+        }
+
+        RenderUtil.batchFlush(IBO, VAO, indexCount);
+        indexCount = 0;
+    }
+
+    private void addVertex(Vec3 pos, Vec2 uv, float tID, Vec4 color) {
         vertexData.put(pos.x);
         vertexData.put(pos.y);
         vertexData.put(pos.z);
+        vertexData.put(uv.x);
+        vertexData.put(uv.y);
+        vertexData.put(tID);
         vertexData.put(color.x);
         vertexData.put(color.y);
         vertexData.put(color.z);
         vertexData.put(color.w);
     }
 
-    @Override
-    public void flush() {
-        RenderUtil.batchFlush(IBO,VAO,indexCount);
-        indexCount=0;
-    }
- }
+}

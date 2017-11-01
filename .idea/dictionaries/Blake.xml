@@ -2,6 +2,7 @@
   <dictionary name="Blake">
     <words>
       <w>glfw</w>
+      <w>kernings</w>
       <w>lwjgl</w>
       <w>quat</w>
       <w>renderables</w>

@@ -13,6 +13,12 @@ public class Vec3 {
 
     }
 
+    public Vec3(Vec2 v, float z) {
+        x = v.x;
+        y = v.y;
+        this.z = z;
+    }
+
     public Vec3() {
         x = y = z = 0;
     }
@@ -22,7 +28,7 @@ public class Vec3 {
     }
 
     public Vec3 add(float vx, float vy, float vz) {
-        return new Vec3(x + vx, y + vy, z+vz);
+        return new Vec3(x + vx, y + vy, z + vz);
     }
 
     public Vec3 sub(Vec3 v) {
@@ -59,9 +65,9 @@ public class Vec3 {
 
     public Vec3 cross(Vec3 vec) {
         return new Vec3(
-                y*vec.z-z*vec.y,
-                -x*vec.z+z*vec.x,
-                x*vec.y-y*vec.x);
+                y * vec.z - z * vec.y,
+                -x * vec.z + z * vec.x,
+                x * vec.y - y * vec.x);
     }
 
     public Vec3 normalise() {

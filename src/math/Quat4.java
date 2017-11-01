@@ -27,7 +27,7 @@ public class Quat4 {
     public Quat4 normailise() {
         float len = len();
         w /= len;
-        v = v.mul(1 / len);
+        v = v.div(len);
         return this;
     }
 

@@ -20,7 +20,6 @@ public class Window {
     private long window;
 
     private int width, height;
-    private float scale;
     private String title;
 
     public Window(int width, int height, String title) {
@@ -91,7 +90,7 @@ public class Window {
         glfwMakeContextCurrent(window);
 
         // Enable v-sync
-        glfwSwapInterval(1);
+        glfwSwapInterval(0);
 
         // Make the window visible
         glfwShowWindow(window);
@@ -104,6 +103,8 @@ public class Window {
         GL.createCapabilities();
        // glClearColor(0.0f,0.45f,0.8f,1.0f);
         glEnable(GL_TEXTURE_2D);
+        glEnable (GL_BLEND);
+        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     public void clear() {

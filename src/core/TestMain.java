@@ -1,7 +1,9 @@
 package core;
 
+import graphics.font.Font;
+
 public class TestMain {
     public static void main(String[] args) {
-        System.out.println(Integer.toHexString(0x37)+ " : " + Integer.toHexString(((0x37ffffff>>>24))));
+        Font f = new Font("fonts/arial.fnt","fonts/arial.png",32);
     }
 }

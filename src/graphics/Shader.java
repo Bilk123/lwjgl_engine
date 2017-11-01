@@ -18,8 +18,6 @@ public class Shader {
     private String vertexShaderPath;
     private String fragmentShaderPath;
 
-    public static final int SHADER_VERTEX_INDEX = 0;
-    public static final int SHADER_COLOR_INDEX = 1;
 
     public Shader(String vertexShaderPath, String fragmentShaderPath) {
         this.fragmentShaderPath = fragmentShaderPath;
@@ -112,8 +110,16 @@ public class Shader {
         glUniform1f(getUniformLocation(name), val);
     }
 
+    public void setUniformFloatV(String name, float[] data) {
+        glUniform1fv(getUniformLocation(name), data);
+    }
+
     public void setUniformInt(String name, int val) {
         glUniform1i(getUniformLocation(name), val);
+    }
+
+    public void setUniformIntV(String name, int[] data) {
+        glUniform1iv(getUniformLocation(name), data);
     }
 
 }

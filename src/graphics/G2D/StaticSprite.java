@@ -17,6 +17,8 @@ public class StaticSprite extends Renderable2D {
         super(new Vec3(x, y, 0), new Vec2(width, height), color);
 
         va = new VertexArray();
+
+
         float[] vertices = {
                 x, y, 0,
                 x, y + height, 0,
@@ -37,6 +39,10 @@ public class StaticSprite extends Renderable2D {
                 0, 1, 2, 2, 3, 0
         };
         ia = new IndexBuffer(indices);
+        uvs.add(new Vec2(0, 0));
+        uvs.add(new Vec2(0, 1));
+        uvs.add(new Vec2(1, 1));
+        uvs.add(new Vec2(1, 0));
     }
 
 

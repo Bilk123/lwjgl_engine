@@ -1,29 +1,31 @@
 package core;
 
-import graphics.Camera;
-import graphics.Shader;
-import input.Input;
-import math.Vec2;
+import graphics.Transform;
+import graphics.font.Font;
+import graphics.font.Text;
+import graphics.font.TextLayer;
 import math.Vec3;
+import math.Vec4;
 
 public class Main {
 
-
     public static void main(String[] args) {
         Window w = new Window(1600, 900, "Yo");
-
-        Shader shader = new Shader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
-        shader.enable();
-        Camera camera = new Camera(Camera.CAMERA_PERSPECTIVE);
-        
+        Font arial = new Font("fonts/arial.fnt", "fonts/arial.png",32);
+        Text text = new Text("11",arial,Transform.initTranslation(new Vec3(800,450,0)), new Vec4(1,1,1,1));
+        TextLayer textLayer = new TextLayer(w);
+        textLayer.add(text);
+        int frames = 0;
+        long timer = System.currentTimeMillis();
         while (!w.close()) {
-            camera.input();
             w.clear();
-            Vec2 sp = Input.mouseScreenCoords;
-
-            shader.setUniformMat4("camTransMat", camera.getTransform());
-            shader.setUniformVec3("lightPos", new Vec3(sp.x / 100f, 9f - sp.y / 100f, 0));
-
+            textLayer.render();
+            frames++;
+            if (System.currentTimeMillis() - timer > 1000) {
+                timer += 1000;
+                System.out.println("fps : " + frames);
+                frames = 0;
+            }
 
             w.update();
         }

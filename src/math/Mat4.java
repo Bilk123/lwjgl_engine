@@ -38,6 +38,21 @@ public class Mat4 {
         return newMat;
     }
 
+    public Vec3 mul(Vec3 v) {
+        return new Vec3(
+                getElement(0, 0) * v.x + getElement(1, 0) * v.y + getElement(2, 0) * v.z + getElement(3, 0),
+                getElement(0, 1) * v.x + getElement(1, 1) * v.y + getElement(2, 1) * v.z + getElement(3, 1),
+                getElement(0, 2) * v.x + getElement(1, 2) * v.y + getElement(2, 2) * v.z + getElement(3, 2));
+    }
+
+    public Vec4 mul(Vec4 v) {
+        return new Vec4(
+                getElement(0, 0) * v.x + getElement(1, 0) * v.y + getElement(2, 0) * v.z + getElement(3, 0) * v.w,
+                getElement(0, 1) * v.x + getElement(1, 1) * v.y + getElement(2, 1) * v.z + getElement(3, 1) * v.w,
+                getElement(0, 2) * v.x + getElement(1, 2) * v.y + getElement(2, 2) * v.z + getElement(3, 2) * v.w,
+                getElement(0, 3) * v.x + getElement(1, 3) * v.y + getElement(2, 3) * v.z + getElement(3, 3) * v.w);
+    }
+
     public void setElement(int x, int y, float val) {
         if (x >= 0 && x < 4 && y >= 0 && y < 4) {
             mat[x + 4 * y] = val;
@@ -54,11 +69,11 @@ public class Mat4 {
         return new Mat4(1);
     }
 
-    public static Mat4 orthographic(float l, float r, float b, float t, float n, float f) {
+    public static Mat4 orthographic(float l, float r, float b, float t, float n, float f, boolean flipY) {
         Mat4 newMat = new Mat4(1.0f);
         newMat.set(new float[]{
                 2 / (r - l), 0, 0, -(r + l) / (r - l),
-                0, 2 / (t - b), 0, -(t + b) / (t - b),
+                0, (flipY ? -1:1)*2 / (t - b), 0, (flipY ? 1:-1)*(t + b) / (t - b),
                 0, 0, -2 / (f - n), -(f + n) / (f - n),
                 0, 0, 0, 1
         });
@@ -67,7 +82,7 @@ public class Mat4 {
 
     public static Mat4 perspective(float fov, float ar, float n, float f) {
         Mat4 newMat = new Mat4();
-        float t = (float) Math.tan(Math.toRadians(fov/2)) * n;
+        float t = (float) Math.tan(Math.toRadians(fov / 2)) * n;
         float b = -t;
         float r = t * ar;
         float l = -t * ar;
