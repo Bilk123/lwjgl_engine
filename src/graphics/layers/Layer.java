@@ -1,10 +1,10 @@
 package graphics.layers;
 
-import graphics.G2D.Renderable2D;
+import graphics.G2D.renderables2D.Renderable2D;
 import graphics.Shader;
 import graphics.cameras.Camera;
 
-abstract class Layer{
+abstract class Layer {
     protected Shader shader;
     private Camera camera;
 
@@ -15,17 +15,21 @@ abstract class Layer{
         shader.setUniformMat4("prMat", camera.getProjection());
     }
 
-    public void update(){
+    public void update(float dt) {
         shader.enable();
-        camera.input();
+        camera.input(dt);
         shader.setUniformMat4("vmMat", camera.getTransform());
     }
 
     public abstract void render();
 
-    public abstract void add(Renderable2D renderer);
+    public abstract void addRenderable(Renderable2D renderer);
 
     public Camera getCamera() {
         return camera;
+    }
+
+    public void delete() {
+        shader.delete();
     }
 }

@@ -1,11 +1,11 @@
-package graphics.font;
+package graphics.layers;
 
 import core.Window;
-import graphics.G2D.Renderable2D;
-import graphics.G2D.SpriteBatch;
+import graphics.G2D.renderables2D.Renderable2D;
+import graphics.G2D.renderers2D.SpriteBatch;
 import graphics.Shader;
 import graphics.cameras.OrthographicCamera;
-import graphics.layers.Layer2D;
+import graphics.font.Text;
 
 public class TextLayer extends Layer2D {
     public TextLayer(Window window) {
@@ -16,8 +16,8 @@ public class TextLayer extends Layer2D {
     }
 
     @Override
-    public void add(Renderable2D renderable) {
+    public void addRenderable(Renderable2D renderable) {
         if (renderable instanceof Text)
-            super.add(renderable);
+            super.addRenderable(renderable);
     }
 }

@@ -1,8 +1,7 @@
 package graphics.font;
 
-import graphics.G2D.Renderable2D;
+import graphics.G2D.renderables2D.Renderable2D;
 import graphics.Texture;
-import graphics.Transform;
 import math.Vec2;
 import math.Vec3;
 import math.Vec4;
@@ -155,7 +154,7 @@ public class Font {
             this.width = characterSize.x * f.width * f.size / f.sizeDefault;
             this.xAdvance = xAdvance * f.size / f.sizeDefault;
             this.texture = f.atlas;
-            transform = transform.mul(Transform.initTranslation(offset.mul(f.size / f.sizeDefault)));
+            transform.setTranslation(offset.mul(f.size / f.sizeDefault));
             uvs.add(atlasCoords);
             uvs.add(atlasCoords.add(0, characterSize.y));
             uvs.add(atlasCoords.add(characterSize.x, characterSize.y));

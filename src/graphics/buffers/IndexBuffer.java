@@ -11,10 +11,14 @@ public class IndexBuffer {
     public IndexBuffer(int[] indices) {
         count = indices.length;
         I_ID = glGenBuffers();
+        reSubmit(indices);
+
+    }
+
+    public void reSubmit(int [] indices){
         bind();
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, BufferUtil.createBuffer(indices), GL_STATIC_DRAW);
         unbind();
-
     }
 
     public void bind() {

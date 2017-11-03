@@ -1,6 +1,7 @@
-package graphics.G2D;
+package graphics.G2D.renderers2D;
 
-import graphics.RenderUtil;
+import graphics.G2D.renderables2D.Renderable2D;
+import util.RenderUtil;
 import graphics.buffers.IndexBuffer;
 import math.Mat4;
 import math.Vec2;
@@ -82,7 +83,7 @@ public class SpriteBatch extends Renderer2D {
     @Override
     public void submit(Renderable2D s) {
 
-        Mat4 transformStackMat = getLastTransformMat();
+        Mat4 transformStackMat = transformStackBack;
         int tID = s.getTextureID();
         Vec4 color;
         color = s.getColor();
@@ -110,11 +111,11 @@ public class SpriteBatch extends Renderer2D {
             }
 
         }
-
-        addVertex(transformStackMat.mul(s.transform.mul(new Vec3(0, 0, 0))), s.getUvs().get(0), ts, color);
-        addVertex(transformStackMat.mul(s.transform.mul(new Vec3(0, 1, 0))), s.getUvs().get(1), ts, color);
-        addVertex(transformStackMat.mul(s.transform.mul(new Vec3(1, 1, 0))), s.getUvs().get(2), ts, color);
-        addVertex(transformStackMat.mul(s.transform.mul(new Vec3(1, 0, 0))), s.getUvs().get(3), ts, color);
+        Mat4 matrix = s.getTransform().getMatrix();
+        addVertex(transformStackMat.mul(matrix.mul(new Vec3(0, 0, 0))), s.getUvs().get(0), ts, color);
+        addVertex(transformStackMat.mul(matrix.mul(new Vec3(0, 1, 0))), s.getUvs().get(1), ts, color);
+        addVertex(transformStackMat.mul(matrix.mul(new Vec3(1, 1, 0))), s.getUvs().get(2), ts, color);
+        addVertex(transformStackMat.mul(matrix.mul(new Vec3(1, 0, 0))), s.getUvs().get(3), ts, color);
 
         indexCount += 6;
     }
@@ -128,6 +129,7 @@ public class SpriteBatch extends Renderer2D {
 
     @Override
     public void flush() {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         for (int i = 0; i < textureSlots.size(); i++) {
             glActiveTexture(GL_TEXTURE0 + i);
             glBindTexture(GL_TEXTURE_2D, textureSlots.get(i));

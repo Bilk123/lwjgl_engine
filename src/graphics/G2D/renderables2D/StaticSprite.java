@@ -1,4 +1,4 @@
-package graphics.G2D;
+package graphics.G2D.renderables2D;
 
 import graphics.buffers.Buffer;
 import graphics.buffers.IndexBuffer;
@@ -46,11 +46,11 @@ public class StaticSprite extends Renderable2D {
     }
 
 
-    VertexArray getVertexArray() {
+    public VertexArray getVertexArray() {
         return va;
     }
 
-    IndexBuffer getIndexArray() {
+    public IndexBuffer getIndexArray() {
         return ia;
     }
 

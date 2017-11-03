@@ -107,19 +107,17 @@ public class Window {
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    public void clear() {
+     void clear() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
     }
 
 
-    public void update() {
+     void update() {
         int error = glGetError();
         if (error != GL_NO_ERROR) {
-            System.out.println("OpenGL error: " + error);
+            System.out.println("OpenGL error: " + Integer.toHexString(error));
         }
         glfwSwapBuffers(window); // swap the color buffers
-
-        Input.update();
 
         // Poll for window events. The key callback above will only be
         // invoked during this call.
@@ -133,4 +131,6 @@ public class Window {
     public int getHeight() {
         return height;
     }
+
+
 }

@@ -1,6 +1,6 @@
 package graphics.layers;
 
-import graphics.G2D.SpriteBatch;
+import graphics.G2D.renderers2D.SpriteBatch;
 import graphics.Shader;
 import graphics.cameras.FirstPersonCamera;
 

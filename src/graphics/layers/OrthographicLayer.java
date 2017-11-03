@@ -1,6 +1,6 @@
 package graphics.layers;
 
-import graphics.G2D.SpriteBatch;
+import graphics.G2D.renderers2D.SpriteBatch;
 import graphics.Shader;
 import graphics.cameras.OrthographicCamera;
 import input.Input;
@@ -13,8 +13,8 @@ public class OrthographicLayer extends Layer2D{
     }
 
     @Override
-    public void update() {
-        super.update();
+    public void update(float dt) {
+        super.update(dt);
         Vec2 sp = Input.mouseScreenCoords;
         shader.setUniformVec3("lightPos", new Vec3(sp.x *0.02f-16f, 9f-sp.y *0.02f, 0));
     }

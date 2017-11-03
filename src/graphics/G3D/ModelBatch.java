@@ -1,6 +1,6 @@
 package graphics.G3D;
 
-import graphics.RenderUtil;
+import util.RenderUtil;
 import graphics.Shader;
 import graphics.buffers.IndexBuffer;
 import math.Vec3;
@@ -9,8 +9,8 @@ import math.Vec4;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
-import static graphics.G2D.SpriteBatch.SHADER_COLOR_INDEX;
-import static graphics.G2D.SpriteBatch.SHADER_VERTEX_INDEX;
+import static graphics.G2D.renderers2D.SpriteBatch.SHADER_COLOR_INDEX;
+import static graphics.G2D.renderers2D.SpriteBatch.SHADER_VERTEX_INDEX;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
@@ -72,10 +72,15 @@ public class ModelBatch {
         for (int i = 0; i < indicesData.size(); i++) {
             indices[i] = indicesData.get(i);
         }
-        IBO = new IndexBuffer(indices);
+        IBO.reSubmit(indices);
         glUnmapBuffer(GL_ARRAY_BUFFER);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         indicesData.clear();
+    }
+
+    public void flush() {
+        RenderUtil.batchFlush(IBO, VAO, indexCount);
+        indexCount = 0;
     }
 
     private void addVertex(Vec3 pos, Vec4 color) {
@@ -86,11 +91,6 @@ public class ModelBatch {
         vertexData.put(color.y);
         vertexData.put(color.z);
         vertexData.put(color.w);
-    }
-
-    public void flush() {
-        RenderUtil.batchFlush(IBO, VAO, indexCount);
-        indexCount = 0;
     }
 
 

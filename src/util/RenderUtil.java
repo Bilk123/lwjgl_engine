@@ -1,4 +1,4 @@
-package graphics;
+package util;
 
 import graphics.buffers.IndexBuffer;
 

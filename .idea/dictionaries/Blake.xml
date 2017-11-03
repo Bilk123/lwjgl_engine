@@ -2,10 +2,12 @@
   <dictionary name="Blake">
     <words>
       <w>glfw</w>
+      <w>glsl</w>
       <w>kernings</w>
       <w>lwjgl</w>
       <w>quat</w>
       <w>renderables</w>
+      <w>shaders</w>
     </words>
   </dictionary>
 </component>

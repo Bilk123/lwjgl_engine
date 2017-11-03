@@ -1,12 +1,13 @@
-package graphics.G2D;
+package graphics.G2D.renderers2D;
 
+import graphics.G2D.renderables2D.Renderable2D;
 import math.Mat4;
 
 import java.util.ArrayList;
 
 public abstract class Renderer2D {
     private ArrayList<Mat4> transformationStack;
-    private Mat4 transformStackBack;
+    protected Mat4 transformStackBack;
 
     protected Renderer2D() {
         transformationStack = new ArrayList<>();

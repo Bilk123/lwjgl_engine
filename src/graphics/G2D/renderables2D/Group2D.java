@@ -1,26 +1,25 @@
-package graphics.layers;
+package graphics.G2D.renderables2D;
 
-import graphics.G2D.Renderable2D;
-import graphics.G2D.Renderer2D;
-import math.Mat4;
+import graphics.G2D.renderers2D.Renderer2D;
+import graphics.Transform;
 
 import java.util.ArrayList;
 
-public class Group extends Renderable2D {
+public class Group2D extends Renderable2D {
 
     protected ArrayList<Renderable2D> children;
 
-    public Group() {
+    public Group2D() {
         children = new ArrayList<>();
-        transform = new Mat4(1);
+        transform = new Transform();
     }
 
-    public Group(Mat4 transform) {
+    public Group2D(Transform transform) {
         children = new ArrayList<>();
         this.transform = transform;
     }
 
-    public void setTransform(Mat4 transform) {
+    public void setTransform(Transform transform) {
         this.transform = transform;
     }
 
@@ -32,7 +31,7 @@ public class Group extends Renderable2D {
     public void submit(Renderer2D renderer) {
         super.submit(renderer);
         for (Renderable2D renderable : children) {
-            if (renderable instanceof Group) {
+            if (renderable instanceof Group2D) {
                 renderable.submit(renderer);
             } else
                 renderer.submit(renderable);

@@ -1,11 +1,14 @@
-package graphics.G2D;
+package graphics.G2D.renderers2D;
+
+import graphics.G2D.renderables2D.Renderable2D;
+import graphics.G2D.renderables2D.StaticSprite;
 
 import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-public class Simple2DRenderer extends Renderer2D{
+public class Simple2DRenderer extends Renderer2D {
 
 
     private ArrayList<StaticSprite> sprites;
@@ -21,6 +24,7 @@ public class Simple2DRenderer extends Renderer2D{
     }
 
     public void flush() {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         for (StaticSprite s : sprites) {
             s.getVertexArray().bind();
             s.getIndexArray().bind();

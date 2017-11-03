@@ -1,4 +1,4 @@
-package graphics.G2D;
+package graphics.G2D.renderables2D;
 
 import math.Vec2;
 import math.Vec3;
