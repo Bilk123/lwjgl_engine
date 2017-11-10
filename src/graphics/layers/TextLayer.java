@@ -4,7 +4,7 @@ import core.Window;
 import graphics.G2D.renderables2D.Renderable2D;
 import graphics.G2D.renderers2D.SpriteBatch;
 import graphics.Shader;
-import graphics.cameras.OrthographicCamera;
+import scenes.cameras.OrthographicCamera;
 import graphics.font.Text;
 
 public class TextLayer extends Layer2D {

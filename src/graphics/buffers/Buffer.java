@@ -18,15 +18,15 @@ public class Buffer {
         unbind();
     }
 
-    public void bind() {
+    void bind() {
         glBindBuffer(GL_ARRAY_BUFFER, B_ID);
     }
 
-    public void unbind() {
+    void unbind() {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    public int getComponentCount() {
+    int getComponentCount() {
         return componentCount;
     }
 

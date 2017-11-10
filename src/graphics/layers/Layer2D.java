@@ -4,7 +4,7 @@ import graphics.G2D.renderables2D.Group2D;
 import graphics.G2D.renderables2D.Renderable2D;
 import graphics.G2D.renderers2D.Renderer2D;
 import graphics.Shader;
-import graphics.cameras.Camera;
+import scenes.cameras.Camera;
 
 import java.util.ArrayList;
 

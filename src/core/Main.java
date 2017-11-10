@@ -1,5 +1,6 @@
 package core;
 
+import debug.Debug;
 import graphics.G2D.renderables2D.Sprite;
 import input.Input;
 import math.Vec4;
@@ -8,7 +9,7 @@ import scenes.entities.Entity;
 import util.Time;
 
 public class Main {
-
+    public static int ups = 60;
     public static void main(String[] args) {
         Window w = new Window(1600, 900, "Yo");
         Debug debug = new Debug(w);
@@ -20,7 +21,7 @@ public class Main {
         int frames = 0;
         long timer = System.currentTimeMillis();
         long lastTime = Time.getTime();
-        final double ns = Time.SECOND / 60.0;
+        final double ns = Time.SECOND / ups;
         double delta = 0;
         int updates = 0;
 
@@ -29,14 +30,15 @@ public class Main {
 
             long now = Time.getTime();
             delta += (now - lastTime) / ns;
-            Time.setDeltaTime((float) (delta / 60.0));
+            Time.setDeltaTime((float) (delta / ups));
             lastTime = now;
+            float dt = Time.deltaTime;
             while (delta >= 1) {
-                Input.update();
                 //scene.update(Time.deltaTime);
-                debug.update(Time.deltaTime);
+                debug.update(dt);
                 delta--;
                 updates++;
+                Input.update();
             }
 
             frames++;

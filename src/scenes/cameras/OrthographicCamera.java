@@ -1,4 +1,4 @@
-package graphics.cameras;
+package scenes.cameras;
 
 import math.Mat4;
 

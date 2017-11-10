@@ -82,7 +82,6 @@ public class SpriteBatch extends Renderer2D {
 
     @Override
     public void submit(Renderable2D s) {
-
         Mat4 transformStackMat = transformStackBack;
         int tID = s.getTextureID();
         Vec4 color;

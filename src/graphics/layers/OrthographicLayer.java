@@ -2,7 +2,7 @@ package graphics.layers;
 
 import graphics.G2D.renderers2D.SpriteBatch;
 import graphics.Shader;
-import graphics.cameras.OrthographicCamera;
+import scenes.cameras.OrthographicCamera;
 import input.Input;
 import math.Vec2;
 import math.Vec3;

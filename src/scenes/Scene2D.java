@@ -2,7 +2,7 @@ package scenes;
 
 import graphics.G2D.renderers2D.SpriteBatch;
 import graphics.Shader;
-import graphics.cameras.OrthographicCamera;
+import scenes.cameras.OrthographicCamera;
 import graphics.layers.Layer2D;
 import scenes.entities.Entity;
 

@@ -11,7 +11,7 @@ public abstract class Renderer2D {
 
     protected Renderer2D() {
         transformationStack = new ArrayList<>();
-        transformationStack.add(new Mat4(1));
+        transformationStack.add(Mat4.IDENTITY);
         transformStackBack = getLastTransformMat();
     }
 
@@ -34,7 +34,7 @@ public abstract class Renderer2D {
 
     public void transformationStackToIdentity() {
         transformationStack.clear();
-        transformationStack.add(new Mat4(1));
+        transformationStack.add(Mat4.IDENTITY);
         transformStackBack = transformationStack.get(0);
     }
 

@@ -11,26 +11,29 @@ public class Ellipse extends Shape {
     public static final Vec2[] VERTICES;
 
     static {
-        VERTICES = new Vec2[RESOLUTION];
+        VERTICES = new Vec2[RESOLUTION + 1];
 
         float x, y;
-        for (int i = 0; i < RESOLUTION; i++) {
+        VERTICES[0] = new Vec2(0, 0);
+        for (int i = 1; i < RESOLUTION + 1; i++) {
             x = (float) Math.cos(Math.toRadians(i * 360f / RESOLUTION));
             y = (float) Math.sin(Math.toRadians(i * 360f / RESOLUTION));
             VERTICES[i] = new Vec2(x, y);
         }
 
-        INDICES = new int[RESOLUTION * 3];
-
-        for (int i = 0, o = 0; i < RESOLUTION; i++, o += 3) {
-            INDICES[o] = i;
-            INDICES[o + 1] = i;
-            INDICES[o + 2] = (i + 1)%(RESOLUTION);
+        INDICES = new int[RESOLUTION * 3 + 3];
+        INDICES[0] = 0;
+        INDICES[1] = 0;
+        INDICES[2] = 1;
+        for (int i = 0, o = 3; i < RESOLUTION; i++, o += 3) {
+            INDICES[o] = i + 1;
+            INDICES[o + 1] = i + 1;
+            INDICES[o + 2] = ((i + 1) % (RESOLUTION)) + 1;
         }
     }
 
     private Vec2 centre;
-    private float width;
+    protected float width;
     private float height;
 
 

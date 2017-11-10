@@ -1,5 +1,6 @@
 package math;
 
+@SuppressWarnings("ALL")
 public class Vec4 {
 
     public static final int COMPONENTS = 4;
@@ -15,6 +16,13 @@ public class Vec4 {
 
     }
 
+    public Vec4(Vec3 v, float w) {
+        x = v.x;
+        y = v.y;
+        z = v.z;
+        this.w = w;
+    }
+
     public Vec4() {
         x = y = z = w = 0;
     }
@@ -23,12 +31,24 @@ public class Vec4 {
         return new Vec4(x + v.x, y + v.y, z + v.z, w + v.w);
     }
 
+    public Vec4 add(float vx, float vy, float vz, float vw) {
+        return new Vec4(x + vx, y + vy, z + vz, w + vw);
+    }
+
     public Vec4 sub(Vec4 v) {
         return new Vec4(x - v.x, y - v.y, z - v.z, w - v.w);
     }
 
+    public Vec4 sub(float vx, float vy, float vz, float vw) {
+        return new Vec4(x - vx, y - vy, z - vz, w - vw);
+    }
+
     public Vec4 mul(Vec4 v) {
         return new Vec4(x * v.x, y * v.y, z * v.z, w * v.w);
+    }
+
+    public Vec4 mul(float vx, float vy, float vz, float vw) {
+        return new Vec4(x * vx, y * vy, z * vz, w * vw);
     }
 
     public Vec4 mul(float scl) {
@@ -37,6 +57,10 @@ public class Vec4 {
 
     public Vec4 div(Vec4 v) {
         return new Vec4(x / v.x, y / v.y, z / v.z, w / v.w);
+    }
+
+    public Vec4 div(float vx, float vy, float vz, float vw) {
+        return new Vec4(x / vx, y / vy, z / vz, w / vw);
     }
 
     public Vec4 div(float scl) {

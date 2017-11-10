@@ -1,64 +1,45 @@
 package physics.physics2D;
 
-import graphics.G2D.renderables2D.Renderable2D;
 import graphics.G2D.shapes.Shape;
-import graphics.Transform;
-import graphics.G2D.renderables2D.Group2D;
 import math.Vec2;
 import math.Vec3;
 
-import java.util.ArrayList;
+public class RigidBody2D {
+    private static Vec2 gravity = new Vec2(0f, 0f);
 
-public class RigidBody2D extends Group2D {
-    public static Vec2 gravity = new Vec2(0, 9.8f);
+    public static Vec2 getGravity() {
+        return gravity;
+    }
 
     private Vec2 com;
     private float mass;
 
+    private boolean fixed = false;
     private Vec2 position;
     private Vec2 velocity;
     private Vec2 acceleration;
 
+    private Shape shape;
 
-    public RigidBody2D(float mass) {
+    public RigidBody2D(float mass, Shape shape) {
         this.mass = mass;
-        transform = new Transform();
-        position = new Vec2();
-        velocity = new Vec2(1, 0);
-        acceleration = new Vec2();
-        children = new ArrayList<>();
+        this.shape = shape;
+        position = shape.calculateCentroid();
+        this.shape.getTransform().setTranslation(new Vec3(position, 0));
+        velocity = new Vec2(0, 0);
+        acceleration = new Vec2().add(gravity);
     }
 
-    @Override
-    public void addChild(Renderable2D renderable) {
-        if (renderable instanceof Shape)
-            addFixture((Shape) renderable);
-    }
-
-    public void addFixture(Shape s) {
-        children.add(s);
+    public void setFixed(boolean fixed) {
+        this.fixed = fixed;
     }
 
     public void addForce(Vec2 force) {
-    }
-
-    public void addImpulse(Vec2 force, float time) {
+        acceleration = acceleration.add(force.div(mass));
     }
 
     public void getCentreOfMass() {
-        float sumOfAreas = 0;
-        float sumOfAreasWithY = 0;
-        float sumOfAreasWithX = 0;
-        float y, x;
-        for (Renderable2D r : children) {
-            Shape s = (Shape)r;
-            sumOfAreas += s.calculateArea();
-            sumOfAreasWithX += s.calculateArea() * s.calculateCentroid().x;
-            sumOfAreasWithY += s.calculateArea() * s.calculateCentroid().y;
-        }
-        x = sumOfAreasWithX / sumOfAreas;
-        y = sumOfAreasWithY / sumOfAreas;
-        com = new Vec2(x, y);
+        com = shape.calculateCentroid();
     }
 
     public void setVelocity(Vec2 velocity) {
@@ -74,7 +55,38 @@ public class RigidBody2D extends Group2D {
     }
 
     public void update(float dt) {
-        position = position.add(velocity.mul(dt));
-        transform.setTranslation(new Vec3(position, 0));
+        if (!fixed) {
+            velocity = velocity.add(acceleration.mul(dt));
+            position = position.add(velocity.mul(dt));
+            shape.getTransform().setTranslation(new Vec3(position, 0));
+        }
+    }
+
+    public static void setGravity(Vec2 gravity) {
+        RigidBody2D.gravity = gravity;
+    }
+
+    public Vec2 getVelocity() {
+        return velocity;
+    }
+
+    public Vec2 getPosition() {
+        return position;
+    }
+
+    public void applyImpulse(Vec2 impulse) {
+        velocity = velocity.add(impulse.div(mass));
+    }
+
+    public Shape getShape() {
+        return shape;
+    }
+
+    public float getMass() {
+        return mass;
+    }
+
+    public boolean isFixed() {
+        return fixed;
     }
 }

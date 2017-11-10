@@ -37,4 +37,17 @@ public class Line extends Shape {
     public boolean contains(Vec2 point) {
         return false;
     }
+
+    public void setP1(Vec2 p1) {
+        this.p1 = p1;
+    }
+
+    public void setP2(Vec2 p2) {
+        this.p2 = p2;
+    }
+
+    public void set(Vec2 p1, Vec2 p2) {
+        this.p1 = p1;
+        this.p2 = p2;
+    }
 }

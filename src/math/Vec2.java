@@ -1,6 +1,10 @@
 package math;
 
+@SuppressWarnings("ALL")
 public class Vec2 {
+
+    public static final Vec2 X = new Vec2(1, 0);
+    public static final Vec2 Y = new Vec2(0, 1);
 
     public static final int COMPONENTS = 2;
     public static final int BYTES = COMPONENTS * Float.BYTES;
@@ -57,18 +61,6 @@ public class Vec2 {
         return new Vec2(x / scl, y / scl);
     }
 
-    public float dot(Vec2 v) {
-        return x * v.x + y * v.y;
-    }
-
-    public float len2() {
-        return dot(this);
-    }
-
-    public float len() {
-        return (float) Math.sqrt(len2());
-    }
-
     public Vec2 rotate(float a) {
         float c = (float) Math.cos(Math.toRadians(a));
         float s = (float) Math.sin(Math.toRadians(a));
@@ -84,6 +76,27 @@ public class Vec2 {
 
     public Vec2 cpy() {
         return new Vec2(x, y);
+    }
+
+    public float dot(Vec2 v) {
+        return x * v.x + y * v.y;
+    }
+
+    public float len2() {
+        return dot(this);
+    }
+
+    public float len() {
+        return (float) Math.sqrt(len2());
+    }
+
+    public void set(Vec2 v) {
+        x = v.x;
+        y = v.y;
+    }
+
+    public Vec2 perp() {
+        return new Vec2(y, -x);
     }
 
     @Override

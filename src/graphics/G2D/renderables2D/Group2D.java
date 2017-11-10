@@ -19,6 +19,10 @@ public class Group2D extends Renderable2D {
         this.transform = transform;
     }
 
+    public ArrayList<Renderable2D> getChildren() {
+        return children;
+    }
+
     public void setTransform(Transform transform) {
         this.transform = transform;
     }

@@ -2,7 +2,7 @@ package graphics.layers;
 
 import graphics.G2D.renderables2D.Renderable2D;
 import graphics.Shader;
-import graphics.cameras.Camera;
+import scenes.cameras.Camera;
 
 abstract class Layer {
     protected Shader shader;

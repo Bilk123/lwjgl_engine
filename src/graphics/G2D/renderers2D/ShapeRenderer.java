@@ -64,26 +64,33 @@ public class ShapeRenderer extends Renderer2D {
 
     @Override
     public void submit(Renderable2D renderable) {
+
         if (renderable instanceof Rectangle) {
             Rectangle r = (Rectangle) renderable;
             addRectangle(r);
         } else if (renderable instanceof Ellipse) {
+            push(renderable.getTransform().getMatrix());
             Ellipse e = (Ellipse) renderable;
             addEllipse(e);
         } else if (renderable instanceof Line) {
+            push(renderable.getTransform().getMatrix());
             Line l = (Line) renderable;
             addLine(l);
         } else if (renderable instanceof Point) {
+            push(renderable.getTransform().getMatrix());
             Point p = (Point) renderable;
             addPoint(p);
         }
+        pop();
     }
 
     private void addRectangle(Rectangle r) {
-        Vec2[] vertices = Rectangle.vertices;
+
+        push(r.getTransform().getMatrix());
+        Vec2[] vertices = Rectangle.VERTICES;
         for (int i = 0; i < vertices.length; i++) {
             Vec2 vertex = vertices[i];
-            addVertex(r.getTransform().getMatrix().mul(new Vec3(vertex, 0)), r.getColor());
+            addVertex(transformStackBack.mul(new Vec3(vertex, 0)), r.getColor());
         }
         for (int i : Rectangle.indices) {
             indicesData.add(i + indexOffset);
@@ -93,7 +100,7 @@ public class ShapeRenderer extends Renderer2D {
     }
 
     private void addPoint(Point p) {
-        addVertex(new Vec3(p.getPoint(), 0), p.getColor());
+        addVertex(transformStackBack.mul(new Vec3(p.getPoint(), 0)), p.getColor());
         addVertex(new Vec3(p.getPoint().add(0.01f, 0.01f), 0), p.getColor());
         indicesData.add(indexOffset);
         indicesData.add(indexOffset);
@@ -106,7 +113,7 @@ public class ShapeRenderer extends Renderer2D {
         Vec2[] vertices = Ellipse.VERTICES;
         for (int i = 0; i < vertices.length; i++) {
             Vec2 vertex = vertices[i];
-            addVertex(e.getTransform().getMatrix().mul(new Vec3(vertex, 0)), e.getColor());
+            addVertex(transformStackBack.mul(new Vec3(vertex, 0)), e.getColor());
         }
         for (int i : Ellipse.INDICES) {
             indicesData.add(i + indexOffset);
@@ -119,8 +126,8 @@ public class ShapeRenderer extends Renderer2D {
         Vec2 p1 = l.getP1();
         Vec2 p2 = l.getP2();
 
-        addVertex(new Vec3(p1, 0), l.getColor());
-        addVertex(new Vec3(p2, 0), l.getColor());
+        addVertex(transformStackBack.mul(new Vec3(p1, 0)), l.getColor());
+        addVertex(transformStackBack.mul(new Vec3(p2, 0)), l.getColor());
 
         for (int i : Line.INDICES) {
             indicesData.add(i + indexOffset);

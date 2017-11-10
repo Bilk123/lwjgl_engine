@@ -1,12 +1,13 @@
-package graphics.layers;
+package debug;
 
 import graphics.G2D.renderables2D.Group2D;
 import graphics.G2D.renderables2D.Renderable2D;
-import graphics.G2D.shapes.Shape;
 import graphics.G2D.renderers2D.ShapeRenderer;
+import graphics.G2D.shapes.Shape;
 import graphics.Shader;
-import graphics.cameras.OrthographicCamera;
 import graphics.font.Text;
+import graphics.layers.Layer2D;
+import scenes.cameras.OrthographicCamera;
 
 public class DebugLayer extends Layer2D {
     public DebugLayer() {
@@ -24,16 +25,5 @@ public class DebugLayer extends Layer2D {
 
             renderables.add(renderable);
         }//TODO: add exceptions for invalid renderables
-    }
-
-    @Override
-    public void render() {
-        renderer.begin();
-        for (Renderable2D r : renderables) {
-            renderer.submit(r);
-        }
-        renderer.end();
-        shader.enable();
-        renderer.flush();
     }
 }

@@ -6,42 +6,43 @@ import math.Vec3;
 
 public class Transform {
     private Mat4 transform;
-    private Vec3 translate;
-    private Vec3 scale;
-    private Quat4 rotation;
+    private Mat4 translate;
+    private Mat4 scale;
+    private Mat4 rotation;
+
 
     public Transform() {
-        translate = new Vec3();
-        scale = new Vec3(1, 1, 1);
-        rotation = new Quat4();
+        translate = new Mat4(1);
+        scale = new Mat4(1);
+        rotation = new Quat4().toMat4();
         update();
     }
 
     public Transform(Vec3 translation) {
-        this.translate = translation;
-        rotation = new Quat4();
-        scale = new Vec3(1, 1, 1);
+        this.translate = Mat4.initTranslation(translation);
+        this.scale = new Mat4(1);
+        rotation = new Quat4().toMat4();
         update();
     }
 
     public Transform(Quat4 rotation) {
-        this.translate = new Vec3(0, 0, 0);
-        this.scale = new Vec3(1, 1, 1);
-        this.rotation = rotation;
+        this.translate = new Mat4(1);
+        this.scale = new Mat4(1);
+        this.rotation = rotation.toMat4();
         update();
     }
 
     public Transform(Vec3 translation, Vec3 scale) {
-        translate = translation;
-        this.scale = scale;
-        rotation = new Quat4();
+        translate = Mat4.initTranslation(translation);
+        this.scale = Mat4.initScale(scale);
+        rotation = new Quat4().toMat4();
         update();
     }
 
     public Transform(Vec3 translation, Vec3 scale, Quat4 rotation) {
-        this.translate = translation;
-        this.scale = scale;
-        this.rotation = rotation;
+        this.translate = Mat4.initTranslation(translation);
+        this.scale = Mat4.initScale(scale);
+        this.rotation = rotation.toMat4();
         update();
     }
 
@@ -51,48 +52,60 @@ public class Transform {
     }
 
     public void translate(Vec3 translate) {
-        this.translate = this.translate.add(translate);
+        this.translate = this.translate.mul(Mat4.initTranslation(translate));
         update();
     }
 
     public void setTranslation(Vec3 translate) {
-        this.translate = translate;
+        this.translate = Mat4.initTranslation(translate);
         update();
     }
 
     public void rotate(Quat4 rotation) {
-        this.rotation = this.rotation.mul(rotation);
+        this.rotation = this.rotation.mul(rotation.toMat4());
         update();
     }
 
     public void setRotation(Quat4 rotation) {
-        this.rotation = rotation;
+        this.rotation = rotation.toMat4();
         update();
     }
 
     public void scale(Vec3 scale) {
-        this.scale = this.scale.mul(scale);
+        this.scale = this.scale.mul(Mat4.initScale(scale));
         update();
     }
 
     public void setScale(Vec3 scale) {
-        this.scale = scale;
+        this.scale = Mat4.initScale(scale);
         update();
     }
 
     private void update() {
-        transform = Mat4.initScale(scale).mul(Mat4.initRotation(rotation)).mul(Mat4.initTranslation(translate));
+        transform = scale.mul(rotation).mul(translate);
     }
 
-    public Quat4 getRotation() {
+    public Mat4 getInverse() {
+        return transform.inverse();
+    }
+
+    public void transform(Mat4 transform) {
+        this.transform = this.transform.mul(transform);
+    }
+
+    public void setTransform(Mat4 transform) {
+        this.transform = transform;
+    }
+
+    public Mat4 getRotation() {
         return rotation;
     }
 
-    public Vec3 getScale() {
+    public Mat4 getScale() {
         return scale;
     }
 
-    public Vec3 getTranslate() {
+    public Mat4 getTranslate() {
         return translate;
     }
 }

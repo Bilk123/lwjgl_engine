@@ -1,6 +1,12 @@
 package math;
 
+@SuppressWarnings("ALL")
 public class Vec3 {
+    public static final Vec3 X = new Vec3(1, 0, 0);
+    public static final Vec3 Y = new Vec3(0, 1, 0);
+    public static final Vec3 Z = new Vec3(0, 0, 1);
+    public static final Vec3 ZERO = new Vec3(0, 0, 0);
+
     public static final int COMPONENTS = 3;
     public static final int BYTES = COMPONENTS * Float.BYTES;
 
@@ -35,8 +41,16 @@ public class Vec3 {
         return new Vec3(x - v.x, y - v.y, z - v.z);
     }
 
+    public Vec3 sub(float vx, float vy, float vz) {
+        return new Vec3(x - vx, y - vy, z - vz);
+    }
+
     public Vec3 mul(Vec3 v) {
         return new Vec3(x * v.x, y * v.y, z * v.z);
+    }
+
+    public Vec3 mul(float vx, float vy, float vz) {
+        return new Vec3(x * vx, y * vy, z * vz);
     }
 
     public Vec3 mul(float scl) {
@@ -45,6 +59,10 @@ public class Vec3 {
 
     public Vec3 div(Vec3 v) {
         return new Vec3(x / v.x, y / v.y, z / v.z);
+    }
+
+    public Vec3 div(float vx, float vy, float vz) {
+        return new Vec3(x / vx, y / vy, z / vz);
     }
 
     public Vec3 div(float scl) {
@@ -93,5 +111,9 @@ public class Vec3 {
             Vec3 v = (Vec3) obj;
             return v.x == x && v.y == y && v.z == z;
         } else return false;
+    }
+
+    public Vec2 toVec2() {
+        return new Vec2(x, y);
     }
 }

@@ -2,7 +2,7 @@ package graphics.layers;
 
 import graphics.G2D.renderers2D.SpriteBatch;
 import graphics.Shader;
-import graphics.cameras.FirstPersonCamera;
+import scenes.cameras.FirstPersonCamera;
 
 public class PerspectiveLayer extends Layer2D{
 
